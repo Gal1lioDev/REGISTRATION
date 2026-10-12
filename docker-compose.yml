@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: defcon_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-defcon_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-defcon_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-defcon_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-defcon_user} -d ${POSTGRES_DB:-defcon_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: defcon_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: production
+      DEBUG: "false"
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-defcon_user}:${POSTGRES_PASSWORD:-defcon_secret}@db:5432/${POSTGRES_DB:-defcon_db}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost,http://localhost:80,http://localhost:3000,http://localhost:5173}
+      SESSION_COOKIE_NAME: ${SESSION_COOKIE_NAME:-defcon_session}
+      SESSION_SECRET: ${SESSION_SECRET:-defcon_production_session_secret_change_me_2026}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-defcon_warangal_2026}
+      ADMIN_SECRET: ${ADMIN_SECRET:-defcon_production_admin_secret_change_me_2026}
+      EVENT_NAME: ${EVENT_NAME:-DEFCON 2.0}
+      EVENT_FORMAT: ${EVENT_FORMAT:-Attack – Defense}
+      EVENT_DURATION: ${EVENT_DURATION:-4 Hours}
+      EVENT_VENUE: ${EVENT_VENUE:-NIT Warangal}
+      EVENT_DATE: ${EVENT_DATE:-October 24, 2026}
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: defcon_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  pgdata:
+    driver: local

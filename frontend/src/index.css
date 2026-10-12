@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: #080b0e;
+  color: #e2e8f0;
+  font-family: 'JetBrains Mono', monospace;
+  overflow-x: hidden;
+}
+
+/* Custom terminal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1217;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232f3e;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff66;
+}
+
+/* Subtle CRT background grid */
+.cyber-grid {
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Subtle terminal glow */
+.terminal-glow {
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+}
+
+.terminal-box-glow {
+  box-shadow: 0 0 20px -5px rgba(0, 255, 102, 0.15);
+}
+
+.terminal-red-glow {
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+/* Terminal input cursor */
+@keyframes blinkCursor {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blinkCursor 1s infinite;
+}
