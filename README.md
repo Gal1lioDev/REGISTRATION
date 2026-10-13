@@ -143,7 +143,7 @@ docker compose logs -f
 
 - Access via the **[admin portal]** button in the footer or by typing `admin` in the terminal.
 - **Default Username**: `admin`
-- **Default Password**: `defcon_warangal_2026` (configure via `ADMIN_PASSWORD` in `.env`)
+- **Default Password**: `*********` (configure via `ADMIN_PASSWORD` in `.env`)
 - **Capabilities**:
   - View total enrolled teams and participants breakdown (1 to 4 member squads).
   - Search teams by name, institution, leader email, or registration code.
